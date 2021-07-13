@@ -1,0 +1,38 @@
+<?php
+/**
+ * Automatically populates the group type field in Event when an Event is saved or updated
+ *
+ */
+ 
+ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\node\NodeInterface;
+ 
+ function auto_populate_event_group_type_node_presave(Drupal\Core\Entity\EntityInterface $entity) {   
+    
+
+   if ($entity->getType() == 'event') {      
+
+     try {
+      $database = \Drupal::database();      
+
+      $temp2 = $entity->get("nid")->getString();  
+      
+      $query = $database->select('group__field_group_type', 'gfgt'); 
+      $query->addField('gfgt', 'field_group_type_target_id', 'grouptype'); 
+      $query->join('group_content_field_data', 'gcfd', 'gcfd.gid = gfgt.entity_id');      
+      $result = $query 
+        ->condition('gcfd.entity_id', $temp2, '=')
+        ->execute();         
+      
+      foreach ($result as $record) {        
+        $entity->set("field_event_group_type", $record->grouptype);
+      }    
+
+     } catch (Exception $e) {
+      \Drupal::logger('Auto Populate Event group type')->notice('error 1 '.$e);
+     }
+   }
+ }
+
+ 
+ 

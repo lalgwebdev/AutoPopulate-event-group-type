@@ -1,5 +1,6 @@
-name: Auto Populate Event Group Type
 type: module
-description: 'Automatically populates Event: Group Type upon saving or updating'
-core: 8.x
+name: Auto Populate Event Group Type
+description: 'Automatically populates Event: Group Type upon saving  or updating'
+package: 'Custom'
+core_version_requirement: ^8.8 || ^9
 version: '1.0'
